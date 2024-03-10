@@ -90,41 +90,45 @@ int main(void)
                 players[0].attack[i] = true;
             }
 
+            int pl = 0;
+            int bt = 1;
+
+
             switch (botnum)
             {
                 case 1:
-                    tit4tat(i, players[0].attack, players[1].attack);
+                    tit4tat(i, players[pl].attack, players[bt].attack);
                     break;
 
                 case 2:
-                    random(i, players[0].attack, players[1].attack, &players[0].score, &players[1].score);
+                    random(i, players[pl].attack, players[bt].attack, &players[pl].score, &players[bt].score);
                     break;
 
                 case 3:
-                    tit4twotat(i, players[0].attack, players[1].attack);
+                    tit4twotat(i, players[pl].attack, players[bt].attack);
                     break;
 
                 case 4:
-                    grudge(i, players[0].attack, players[1].attack);
+                    grudge(i, players[pl].attack, players[bt].attack);
                     break;
 
                 case 5:
-                    revenger(i, players[0].attack, players[1].attack, &players[0].score, &players[1].score);
+                    revenger(i, players[pl].attack, players[bt].attack, &players[pl].score, &players[bt].score);
                     break;
 
                 case 6:
-                    clutch(i, players[1].attack, &players[1].score, &players[0].score);
+                    clutch(i, players[bt].attack, &players[bt].score, &players[pl].score);
                     break;
 
                 case 7:
-                    killer(i, players[1].attack);
+                    killer(i, players[bt].attack);
                     break;
 
                 case 8:
-                    aggressor(i, players[1].attack, &players[1].score, &players[0].score);
+                    aggressor(i, players[bt].attack, &players[bt].score, &players[pl].score);
                     break;
             }
-            play(i, players[0], players[1], &players[0].score, &players[1].score);
+            play(i, players[pl], players[bt], &players[pl].score, &players[bt].score);
         }
     }
     else if (BOTvBOT == true)
@@ -161,72 +165,79 @@ int main(void)
         {
             printf("Round %i:\n", i + 1);
            //lol
+            //bot number 1:
+            int pl = 1;
+            int bt = 0;
             switch (botnum1)
             {
                 case 1:
-                    tit4tat(i, players[1].attack, players[0].attack);
+                    tit4tat(i, players[pl].attack, players[bt].attack);
                     break;
 
                 case 2:
-                    random(i, players[1].attack, players[0].attack, &players[1].score, &players[0].score);
+                    random(i, players[pl].attack, players[bt].attack, &players[pl].score, &players[bt].score);
                     break;
 
                 case 3:
-                    tit4twotat(i, players[1].attack, players[0].attack);
+                    tit4twotat(i, players[pl].attack, players[bt].attack);
                     break;
 
                 case 4:
-                    grudge(i, players[1].attack, players[0].attack);
+                    grudge(i, players[pl].attack, players[bt].attack);
                     break;
 
                 case 5:
-                    revenger(i, players[1].attack, players[0].attack, &players[1].score, &players[0].score);
+                    revenger(i, players[pl].attack, players[bt].attack, &players[pl].score, &players[bt].score);
                     break;
 
                 case 6:
-                    clutch(i, players[0].attack, &players[0].score, &players[1].score);
+                    clutch(i, players[bt].attack, &players[bt].score, &players[pl].score);
                     break;
 
                 case 7:
-                    killer(i, players[0].attack);
+                    killer(i, players[bt].attack);
                     break;
 
                 case 8:
-                    aggressor(i, players[0].attack, &players[0].score, &players[1].score);
+                    aggressor(i, players[bt].attack, &players[bt].score, &players[pl].score);
                     break;
             }
+
+            //bot no. 2:
+            pl = 0;
+            bt = 1;
              switch (botnum2)
             {
                 case 1:
-                    tit4tat(i, players[0].attack, players[1].attack);
+                    tit4tat(i, players[pl].attack, players[bt].attack);
                     break;
 
                 case 2:
-                    random(i, players[0].attack, players[1].attack, &players[0].score, &players[1].score);
+                    random(i, players[pl].attack, players[bt].attack, &players[pl].score, &players[bt].score);
                     break;
 
                 case 3:
-                    tit4twotat(i, players[0].attack, players[1].attack);
+                    tit4twotat(i, players[pl].attack, players[bt].attack);
                     break;
 
                 case 4:
-                    grudge(i, players[0].attack, players[1].attack);
+                    grudge(i, players[pl].attack, players[bt].attack);
                     break;
 
                 case 5:
-                    revenger(i, players[0].attack, players[1].attack, &players[0].score, &players[1].score);
+                    revenger(i, players[pl].attack, players[bt].attack, &players[pl].score, &players[bt].score);
                     break;
 
                 case 6:
-                    clutch(i, players[1].attack, &players[1].score, &players[0].score);
+                    clutch(i, players[bt].attack, &players[bt].score, &players[pl].score);
                     break;
 
                 case 7:
-                    killer(i, players[1].attack);
+                    killer(i, players[bt].attack);
                     break;
 
                 case 8:
-                    aggressor(i, players[1].attack, &players[1].score, &players[0].score);
+                    aggressor(i, players[bt].attack, &players[bt].score, &players[pl].score);
                     break;
             }
 
