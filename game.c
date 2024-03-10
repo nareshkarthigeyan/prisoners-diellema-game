@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define MAX_ROUNDS 100
-#define BOTS_NUM 8
+#define BOTS_NUM 9
 int MAX_PLAYERS = 2;
 
 typedef struct
@@ -16,7 +16,7 @@ typedef struct
     string name;
 } player;
 
-string bots[BOTS_NUM] = {"tit4tat", "random", "tit4twotat", "grudge", "revenger", "clutch", "killer", "aggressor"};
+string bots[BOTS_NUM] = {"tit4tat", "random", "tit4twotat", "grudge", "revenger", "clutch", "killer", "aggressor", "vengence"};
 
 // Bot algorithms:
 void tit4tat(int pos, bool player[], bool bot[]);
@@ -27,6 +27,7 @@ void revenger(int pos, bool player[], bool bot[], int *player_score, int *bot_sc
 void clutch(int pos, bool player[], int *player_score, int *bot_score);
 void killer(int pos, bool bot[]);
 void aggressor(int pos, bool bot[], int *player_score, int *bot_score);
+void vengence(int pos, bool player[], bool bot[], int *player_score, int *bot_score);
 
 // Game:
 void play(int i, player players, player bot, int *player_score, int *bot_score);
@@ -127,6 +128,11 @@ int main(void)
                 case 8:
                     aggressor(i, players[bt].attack, &players[bt].score, &players[pl].score);
                     break;
+
+                case 9:
+                    vengence(i, players[pl].attack, players[bt].attack, &players[pl].score, &players[bt].score);
+                    break;
+
             }
             play(i, players[pl], players[bt], &players[pl].score, &players[bt].score);
         }
@@ -201,6 +207,10 @@ int main(void)
                 case 8:
                     aggressor(i, players[bt].attack, &players[bt].score, &players[pl].score);
                     break;
+
+                case 9:
+                    vengence(i, players[pl].attack, players[bt].attack, &players[pl].score, &players[bt].score);
+                    break;
             }
 
             //bot no. 2:
@@ -238,6 +248,10 @@ int main(void)
 
                 case 8:
                     aggressor(i, players[bt].attack, &players[bt].score, &players[pl].score);
+                    break;
+
+                case 9:
+                    vengence(i, players[pl].attack, players[bt].attack, &players[pl].score, &players[bt].score);
                     break;
             }
 
@@ -388,11 +402,11 @@ void aggressor(int pos, bool bot[], int *player_score, int *bot_score)
 
     int botscore = *bot_score;
     int playerscore = *player_score;
-    int behindBy = botscore - playerscore; 
+    int behindBy = botscore - playerscore;
 
     srand(time(NULL) + pos - behindBy);
 
-    if(pos < MAX_ROUNDS / 5 && (rand() % 100 > 80) || MAX_ROUNDS - 1 == pos)
+    if((pos < MAX_ROUNDS / 5 && (rand() % 100 > 80)) || MAX_ROUNDS - 1 == pos)
     {
         bot[pos] = true;
     }
@@ -404,6 +418,20 @@ void aggressor(int pos, bool bot[], int *player_score, int *bot_score)
     {
         bot[pos] = true;
     }
+}
+
+void vengence(int pos, bool player[], bool bot[], int *player_score, int *bot_score)
+{
+    int copy_index = MAX_ROUNDS / 20;
+    if(player[pos - 1] == true || player[pos - 2] == true)
+    {
+        bot[pos] = true;
+    }
+    else if (pos > copy_index && rand() % 100 > 75)
+    {
+        bot[pos] = player[copy_index - pos];
+    }
+
 }
 
 void play(int i, player players, player bot, int *players_score, int *bot_score)
