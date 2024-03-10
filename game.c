@@ -422,14 +422,38 @@ void aggressor(int pos, bool bot[], int *player_score, int *bot_score)
 
 void vengence(int pos, bool player[], bool bot[], int *player_score, int *bot_score)
 {
-    int copy_index = MAX_ROUNDS / 20;
-    if(player[pos - 1] == true || player[pos - 2] == true)
+    if(pos == MAX_ROUNDS - 1)
     {
         bot[pos] = true;
     }
-    else if (pos > copy_index && rand() % 100 > 75)
+    int copy_index = MAX_ROUNDS / 20;
+    if(pos > MAX_ROUNDS / 30)
     {
-        bot[pos] = player[copy_index - pos];
+        int doIt = 0;
+        for (int i = MAX_ROUNDS / 30; i > 0; i--)
+        {
+            if(player[pos - i] == false)
+            {
+                doIt++;
+            }
+        }
+        if (doIt == MAX_ROUNDS / 30)
+        {
+            bot[pos] = true;
+        }
+    }
+    
+    if(pos >= 2)
+    {
+        if(player[pos - 1] == true && player[pos - 2] == true)
+        {
+            bot[pos] = true;
+        }
+    }
+    
+    if (pos > copy_index && rand() % 100 > 25)
+    {
+        bot[pos] = player[pos - copy_index];
     }
 
 }
