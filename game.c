@@ -381,7 +381,7 @@ void aggressor(int pos, bool bot[], int *player_score, int *bot_score)
 
     srand(time(NULL) + pos - behindBy);
 
-    if(pos < MAX_ROUNDS / 5 && (rand() % 100 > 80))
+    if(pos < MAX_ROUNDS / 5 && (rand() % 100 > 80) || MAX_ROUNDS - 1 == pos)
     {
         bot[pos] = true;
     }
