@@ -5,18 +5,48 @@
 #include <time.h>
 #include <string.h>
 
-#define MAX_ROUNDS 100
-#define BOTS_NUM 9
+#define MAX_ROUNDS 21
+#define BOTS_NUM 10
 int MAX_PLAYERS = 2;
+
+typedef struct
+{
+    int wins;
+    int losses;
+    int ties;
+
+} stat;
 
 typedef struct
 {
     bool attack[MAX_ROUNDS];
     int score;
     string name;
+    stat stats;
 } player;
 
-string bots[BOTS_NUM] = {"tit4tat", "random", "tit4twotat", "grudge", "revenger", "clutch", "killer", "aggressor", "vengence"};
+typedef struct
+{
+    string name;
+    string description;
+    stat stats;
+} bot;
+
+
+
+
+bot bots[BOTS_NUM] = {
+        {"tit4tat", "Prefers to mirror its opponent's moves, creating a delicate dance of strategy. Watch its moves closely for a clue on how to respond.", {0, 0, 0}},
+        {"random", "Embraces randomness, making every move a surprise. Predicting this bot's next move is like trying to catch a breeze.", {0, 0, 0}},
+        {"tit4twotat", "A variation of tit-for-tat, offering a glimpse of forgiveness. It might give you a second chance, but don't rely on it too much.", {0, 0, 0}},
+        {"grudge", "Holds onto past betrayals, responding with caution. Be careful not to provoke its lingering distrust.", {0, 0, 0}},
+        {"revenger", "Strikes back with force, seeking retribution for perceived wrongs. Push it too far, and it will come back at you with a vengeance.", {0, 0, 0}},
+        {"clutch", "Thrives under pressure, revealing its true strength in critical moments. Be prepared for a surprising move when the game hangs in the balance.", {0, 0, 0}},
+        {"killer", "A relentless hunter, aiming for swift victory with precision. Once it senses weakness, it won't hesitate to strike.", {0, 0, 0}},
+        {"aggressor", "Assertive and dominating, pushing boundaries to control the game. It plays to win, no matter the cost.", {0, 0, 0}},
+        {"vengence", "A deep-seated desire for retribution, fueling every calculated move. Beware the consequences of provoking this bot's wrath.", {0, 0, 0}},
+        {"mysterybot", "One of the random bots from the above nine. Name will be covered for a very hardcore experience.", {0, 0, 0}}
+    };
 
 // Bot algorithms:
 void tit4tat(int pos, bool player[], bool bot[]);
@@ -30,6 +60,7 @@ void aggressor(int pos, bool bot[], int *player_score, int *bot_score);
 void vengence(int pos, bool player[], bool bot[], int *player_score, int *bot_score);
 
 // Game:
+int displayBots(void);
 void play(int i, player players, player bot, int *player_score, int *bot_score);
 
 // Main:
@@ -67,22 +98,18 @@ int main(void)
         }
 
 
-        int botnum;
-        do
+        int botnum = displayBots();
+        players[1].name = bots[botnum - 1].name;
+
+        if(botnum == 10)
         {
-            for(int i = 0; i < BOTS_NUM; i++)
-            {
-                printf("%i) %s\n", i + 1, bots[i]);
-            }
-            botnum = get_int("\n\nChoose Bot: ");
-            printf("\n");
+            srand(time(NULL) + strlen(players[0].name));
+            botnum = rand() % 9 + 1;
         }
-        while (botnum > BOTS_NUM || botnum < 1);
-        players[1].name = bots[botnum - 1];
 
         for (int i = 0; i < MAX_ROUNDS; i++)
         {
-            printf("Round %d:\n", i + 1);
+            printf("\nRound %d:\n", i + 1);
             string res = get_string("Attack or Co-operare? A/C: ");
             char response = toupper(res[0]);
 
@@ -139,39 +166,29 @@ int main(void)
     }
     else if (BOTvBOT == true)
     {
-        //TODO
         int botnum1, botnum2;
-        do
+        botnum1 = displayBots();
+
+        players[0].name = bots[botnum1 - 1].name;
+
+        if(botnum1 == 10)
         {
-            for(int i = 0; i < BOTS_NUM; i++)
-            {
-                printf("%i) %s\n", i + 1, bots[i]);
-            }
-            botnum1 = get_int("\n\nChoose Bot: ");
-            printf("\n");
+            srand(time(NULL) + 55);
+            botnum1 = rand() % 9 + 1;
         }
-        while (botnum1 > BOTS_NUM || botnum1 < 1);
 
-        players[0].name = bots[botnum1 - 1];
+        botnum2 = displayBots();
+        players[1].name = bots[botnum2 - 1].name;
 
-        do
+        if(botnum2 == 10)
         {
-            for(int i = 0; i < BOTS_NUM; i++)
-            {
-                printf("%i) %s\n", i + 1, bots[i]);
-            }
-            botnum2 = get_int("\n\nChoose Bot: ");
-            printf("\n");
+            srand(time(NULL) + 99);
+            botnum2 = rand() % 9 + 1;
         }
-        while (botnum2 > BOTS_NUM || botnum2 < 1);
-
-        players[1].name = bots[botnum2 - 1];
 
         for (int i = 0; i < MAX_ROUNDS; i++)
         {
-            printf("Round %i:\n", i + 1);
-           //lol
-            //bot number 1:
+            printf("\nRound %i:\n", i + 1);
             int pl = 1;
             int bt = 0;
             switch (botnum1)
@@ -213,7 +230,6 @@ int main(void)
                     break;
             }
 
-            //bot no. 2:
             pl = 0;
             bt = 1;
              switch (botnum2)
@@ -442,7 +458,7 @@ void vengence(int pos, bool player[], bool bot[], int *player_score, int *bot_sc
             bot[pos] = true;
         }
     }
-    
+
     if(pos >= 2)
     {
         if(player[pos - 1] == true && player[pos - 2] == true)
@@ -450,12 +466,29 @@ void vengence(int pos, bool player[], bool bot[], int *player_score, int *bot_sc
             bot[pos] = true;
         }
     }
-    
-    if (pos > copy_index && rand() % 100 > 25)
+
+    if (pos > 2 * copy_index && rand() % 100 > 25)
     {
         bot[pos] = player[pos - copy_index];
     }
 
+}
+
+int displayBots()
+{
+     int botnum;
+     printf("\nBots List: \n");
+        do
+        {
+            for(int i = 0; i < BOTS_NUM; i++)
+            {
+                printf("%i) %s - %s\n", i + 1, bots[i].name, bots[i].description);
+            }
+            botnum = get_int("\n\nChoose Bot: ");
+            printf("\n");
+        }
+        while (botnum > BOTS_NUM || botnum < 1);
+        return botnum;
 }
 
 void play(int i, player players, player bot, int *players_score, int *bot_score)
