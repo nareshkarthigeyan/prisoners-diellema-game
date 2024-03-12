@@ -62,11 +62,61 @@ void vengence(int pos, bool player[], bool bot[], int *player_score, int *bot_sc
 // Game:
 int displayBots(void);
 void play(int i, player players, player bot, int *player_score, int *bot_score);
+void rules(void);
+void mainmenu(void)
+{
+     char *asciiart =
+    "     ___      _                      _        ___  _     __                    \n"
+    "    / _ \\____(_)__ ___  ___  ___ ___( )___   / _ \\(_)__ / /__ __ _  __ _  ___ _\n"
+    "   / ___/ __/ (_-</ _ \\/ _ \\/ -_) __//(_-<  / // / / -_) / -_)  ' \\/  ' \\/ _ `/\n"
+    "  /_/  /_/ /_/___/\\___/_//_/\\__/_/   /___/ /____/_/\\__/_/\\__/_/_/_/_/_/\\_,_/ \n"
+    "                                                                               \n";
+    printf("%s", asciiart);
+    printf("Made by K.V.Naresh Karthigeyan\n");
+    printf("source code: https://github.com/nareshkarthigeyan/prisoners-diellema-game\n\n");
+    char userres = get_char("Click (P) to play game - or - (Q) to quit. Click (R) for rules: \n");
+    if(toupper(userres) == 'Q')
+    {
+        exit(0);
+    }
+    else if (toupper(userres) == 'R')
+    {
+        rules();
+    }
+    else if(toupper(userres) != 'P')
+    {
+        exit(0);
+    }
 
+}
+
+void rules()
+{
+    printf("\n\nWelcome to the Prisoner's Dilemma Game!\n");
+    printf("In this game, you will play against 10 different bots, each with their own personality.\n");
+    printf("The rules are simple:\n");
+    printf("1. You and your opponent have two choices: 'co-op' or 'attack'.\n");
+    printf("2. If both players 'co-op', you both get +3 points.\n");
+    printf("3. If both players 'attack', you both get +1 point.\n");
+    printf("4. If you 'attack' while your opponent 'co-ops', you get +5 points, and your opponent gets 0 points.\n");
+    printf("5. The game will last for 21 rounds.\n");
+    printf("6. After 21 rounds, the player with the most points wins!\n");
+    printf("7. Get ready to make your moves and outwit the bots!\n");
+
+    char userres = get_char("Click (Q) to quit to main menu: \n");
+    if(toupper(userres) == 'Q')
+    {
+        mainmenu();
+    }
+}
 // Main:
 int main(void)
 {
+    quit:
+    mainmenu();
     player players[MAX_PLAYERS];
+
+    restart:
     for (int i = 0; i < MAX_PLAYERS; i++)
     {
         players[i].score = 0;
@@ -91,7 +141,7 @@ int main(void)
 
     if (BOTvBOT == false)
     {
-        players[0].name = get_string("Enter Player 1 Name: ");
+        players[0].name = get_string("Enter Player Name: ");
         for(int i = 0; i < strlen(players[0].name); i++)
         {
             players[0].name[i] = toupper(players[0].name[i]);
@@ -288,6 +338,16 @@ int main(void)
     else
     {
         printf("Game Tied.\n");
+    }
+
+    char play_again = get_char("Play again? (Y/N)? ");
+    if (toupper(play_again) == 'Y')
+    {
+        goto restart;
+    }
+    else
+    {
+        goto quit;
     }
 }
 
