@@ -5,9 +5,9 @@
 #include <time.h>
 #include <string.h>
 
-#define MAX_ROUNDS 21
 #define BOTS_NUM 10
 int MAX_PLAYERS = 2;
+#define MAX_ROUNDS 21
 
 typedef struct
 {
@@ -63,6 +63,8 @@ void vengence(int pos, bool player[], bool bot[], int *player_score, int *bot_sc
 int displayBots(void);
 void play(int i, player players, player bot, int *player_score, int *bot_score);
 void rules(void);
+void customizeGame(void);
+void credits(void);
 void mainmenu(void)
 {
      char *asciiart =
@@ -72,20 +74,64 @@ void mainmenu(void)
     "  /_/  /_/ /_/___/\\___/_//_/\\__/_/   /___/ /____/_/\\__/_/\\__/_/_/_/_/_/\\_,_/ \n"
     "                                                                               \n";
     printf("%s", asciiart);
-    printf("Made by K.V.Naresh Karthigeyan\n");
-    printf("source code: https://github.com/nareshkarthigeyan/prisoners-diellema-game\n\n");
-    char userres = get_char("Click (P) to play game - or - (Q) to quit. Click (R) for rules: \n");
-    if(toupper(userres) == 'Q')
+    printf("\tMade by K.V.Naresh Karthigeyan\n");
+    printf("\tSource code: https://github.com/nareshkarthigeyan/prisoners-diellema-game\n\n");
+    char userres = get_char("\t(P) PLAY GAME\n\t(R) Rules\n\t(X) Customize Game\n\t(C) Credits\n\t(Q) Quit\n>>> ");
+    userres = toupper(userres);
+
+    switch (userres)
     {
-        exit(0);
+        case 'Q':
+            exit(0);
+            break;
+
+        case 'R':
+            rules();
+            break;
+
+        case 'X':
+            customizeGame();
+            break;
+
+        case 'C':
+            credits();
+            break;
+
+        default:
+            break;
     }
-    else if (toupper(userres) == 'R')
+}
+
+void customizeGame(void)
+{
+    printf("\n CUSTOMIZE GAME:\n");
+    char userres = get_char("\n\t(B) Back\n>>> ");
+    userres = toupper(userres);
+    switch (userres)
     {
-        rules();
+        // case 'A':
+        //     printf("\nCurrent number of rounds per game is __");
+        //     int number = get_int("\nEnter number of Rounds (Default: 21):\n>>> ");
+        //     // MAX_ROUNDS = number;
+        //     mainmenu();
+        //     break;
+
+        case 'B':
+        default:
+            mainmenu();
+            break;
     }
-    else if(toupper(userres) != 'P')
+}
+
+void credits(void)
+{
+    printf("\n\tMade by K V Naresh Karthigeyan\n\tCoded in C\n\tBased on the popular game theory \"Prisoner's Dilemma\"\n");
+     char userres = get_char("\n\tType any key to return\n>>> ");
+    userres = toupper(userres);
+    switch (userres)
     {
-        exit(0);
+        default:
+            mainmenu();
     }
 
 }
@@ -103,8 +149,8 @@ void rules()
     printf("6. After 21 rounds, the player with the most points wins!\n");
     printf("7. Get ready to make your moves and outwit the bots!\n");
 
-    char userres = get_char("Click (Q) to quit to main menu: \n");
-    if(toupper(userres) == 'Q')
+    char userres = get_char("\n\t(B) Back\n\t(ANY KEY) Play Game\n>>> ");
+    if(toupper(userres) == 'B')
     {
         mainmenu();
     }
